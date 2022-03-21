@@ -1,0 +1,20 @@
+---
+- hosts: web
+  become: true
+  tasks:
+
+  - name: create user opsschool
+    user:
+      name: opsschool
+      state: present
+      home : /home/opsschool
+      password: "{{ '0p$Sch00l' | password_hash('sha512') }}"
+      group: root
+  
+  - name: Creates directory
+    file:
+      path: /home/opsschool/ansible
+      state: directory
+      owner: opsschool
+      group: root
+

@@ -1,0 +1,33 @@
+---
+- hosts: aws_ec2
+  become: true
+  tasks:
+  
+  - name: Ansible create file with content example
+    copy:
+      dest: "/home/file_text.txt"
+      mode: 0777
+      owner: ubuntu
+      content: |
+        "I am a text file I exist on the nodes"
+        
+  - name: Compress file /home/file_text.txt /home/file_text.tar.gz
+    archive:
+      path: /home/file_text.txt
+      dest: /home/file_text.tar
+      remove: yes
+      format: tar
+
+
+  - name: Compress file /home/file_text.tar /home/file_text.gz
+    archive:
+      path: /home/file_text.tar
+      dest: /home/file_text.tar.gz
+      remove: yes
+
+  - name: Download foo.conf
+    get_url:
+      url: http://icanhazip.com
+      dest: /home/index.html
+    
+  
