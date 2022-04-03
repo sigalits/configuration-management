@@ -1,0 +1,15 @@
+---
+- name: run over all ec2 servers
+  hosts: aws_ec2
+  become: true
+  remote_user: "{{ 'ubuntu' if (platform_details == 'Linux/UNIX') else ('ec2-user') }}"
+  
+  roles:
+  - nginx
+# - name : run on hosts file 
+#   hosts: redhat
+#   become: true
+#   remote_user: ec2-user
+
+#   roles:
+#   - nginx

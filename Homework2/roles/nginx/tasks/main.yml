@@ -1,0 +1,95 @@
+---
+- name: install dependency on ubuntu
+  apt:
+    name: "{{item}}"
+    state: latest
+    update_cache: yes
+  loop:
+    - ca-certificates
+    - curl
+    - gnupg
+    - lsb-release
+    - python3-pip
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+
+- name: install python3.6 on rhel
+  package:
+    name: "{{item}}"
+    state: present
+  loop:
+    - python36
+    - python3-pip
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat' or ansible_distribution == 'Amazon' 
+
+
+- name: add GPG key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: add docker repository to apt
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu focal stable
+    state: present
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: add docker repository to yum
+  yum_repository:
+    name: docker
+    description: repo for docker
+    baseurl: https://download.docker.com/linux/centos/8/x86_64/stable/
+    gpgcheck: no
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat' or ansible_distribution == 'Amazon'
+
+- name: install docker on ubuntu
+  apt:
+    name: "{{item}}"
+    state: latest
+    update_cache: yes
+  loop:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+
+- name: install docker on Rhel
+  yum:
+    name: "{{item}}"
+    state: present
+    update_cache: yes
+  loop:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat' or ansible_distribution == 'Amazon'
+
+- name: install docker module for python on ubuntu
+  pip:
+    name: docker
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'  
+
+- name: install docker module for python on rhel
+  pip:
+    name: docker
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat' or ansible_distribution == 'Amazon'
+  
+- name: start docker 
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+#  - name: starting nginx
+#    shell: docker run -d -p 8080:80 nginx
+
+- name: pull and start nginx containar
+  docker_container:
+    image: nginx:stable
+    name: nginx
+    auto_remove: true
+    state: started
+    ports: 
+      - "8080:80"
