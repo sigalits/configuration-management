@@ -1,18 +1,32 @@
 ---
+- name: Set Os variable for docker container tasks
+  ansible.builtin.set_fact:
+    Os: "{{ 'ubuntu' if (platform_details == 'Linux/UNIX') else 'rhel' }}"
+
+- name: Print all available facts on docker onstallation
+  ansible.builtin.debug:
+    var:  ansible_user ,remote_user ,Os
 
 - name: install docker module for python 
   pip:
     name: docker
 
-  
+- name: users | adding docker users (for use without sudo)
+  user:
+    name: "{{ item }}"
+    append: yes
+    groups: docker
+  become: true
+  with_items: "{{docker_users_loop[Os] }}"
+- name: install docker module for python 
+  pip:
+    name: docker
+
 - name: start docker 
   service:
     name: docker
     state: started
     enabled: yes
-
-#  - name: starting nginx
-#    shell: docker run -d -p 8080:80 nginx
 
 - name: pull and start nginx containar
   docker_container:
