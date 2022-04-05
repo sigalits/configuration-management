@@ -1,0 +1,33 @@
+---
+- name: Print all available facts on ubuntu
+  ansible.builtin.debug:
+    var: docker_version 
+
+- name: install dependency on ubuntu
+  apt:
+    name: "{{install_defalut_dependency[ansible_user] }}"
+    state: latest
+    update_cache: yes
+
+
+- name: add GPG key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+
+- name: add docker repository to apt
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu focal stable
+    state: present
+
+
+- name: install docker on ubuntu
+  apt:
+    name: "{{install_docker_loop[ansible_user] }}"
+    state: latest
+    update_cache: yes
+
+
+
+
