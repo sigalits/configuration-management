@@ -6,10 +6,3 @@
   
   roles:
   - nginx
-# - name : run on hosts file 
-#   hosts: redhat
-#   become: true
-#   remote_user: ec2-user
-
-#   roles:
-#   - nginx
