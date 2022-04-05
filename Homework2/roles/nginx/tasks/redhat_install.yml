@@ -1,0 +1,34 @@
+---
+- name : setting docker package name
+  set_fact:
+    docker_package: "docker-ce"
+  when: docker_version  == 'None' 
+
+- name: Print all available facts on redhat
+  ansible.builtin.debug:
+    var:  docker_version ,ansible_user ,docker_package
+ 
+
+
+- name: install python3.6 on rhel
+  package:
+    name: "{{install_defalut_dependency[ansible_user] }}"
+    state: present
+
+
+- name: add docker repository to yum
+  yum_repository:
+    name: docker
+    description: repo for docker
+    baseurl: https://download.docker.com/linux/centos/8/x86_64/stable/
+    gpgcheck: no
+
+
+- name: install docker on Rhel
+  yum:
+    name: "{{install_docker_loop[ansible_user] }}"
+    state: present
+    update_cache: yes
+
+
+  
