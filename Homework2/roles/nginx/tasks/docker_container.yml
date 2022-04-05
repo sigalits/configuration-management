@@ -7,20 +7,16 @@
   ansible.builtin.debug:
     var:  ansible_user ,remote_user ,Os
 
-- name: install docker module for python 
-  pip:
-    name: docker
-
-- name: users | adding docker users (for use without sudo)
-  user:
-    name: "{{ item }}"
-    append: yes
-    groups: docker
-  become: true
-  with_items: "{{docker_users_loop[Os] }}"
-- name: install docker module for python 
-  pip:
-    name: docker
+# - name: users | adding docker users (for use without sudo)
+#   user:
+#     name: "{{ item }}"
+#     append: yes
+#     groups: docker
+#   become: true
+#   with_items: "{{docker_users_loop[Os] }}"
+# - name: install docker module for python 
+#   pip:
+#     name: docker
 
 - name: start docker 
   service:

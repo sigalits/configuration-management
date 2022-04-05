@@ -9,7 +9,7 @@ docker_package: "docker-ce-{{docker_version}}"
 install_docker_loop : 
   ubuntu: ["docker-ce", "docker-ce-cli", "containerd.io"]
   ec2-user: ["{{docker_package}}"]
-  
+
 docker_users_loop : 
   ubuntu: ["ubuntu"]
-  rhel: ["ec2-user"]
+  ec2-user: ["ec2-user"]

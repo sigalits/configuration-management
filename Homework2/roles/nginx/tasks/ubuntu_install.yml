@@ -1,7 +1,11 @@
 ---
 - name: Print all available facts on ubuntu
   ansible.builtin.debug:
-    var: docker_version 
+    var: docker_version ,ansible_user
+
+- name : setting fact os on redahat
+  set_fact:
+    Os : "{{ansible_user}}"
 
 - name: install dependency on ubuntu
   apt:
@@ -28,6 +32,13 @@
     state: latest
     update_cache: yes
 
+- name: users | adding docker users (for use without sudo) on ubuntu
+  user:
+    name: "{{ item }}"
+    append: yes
+    groups: docker
+  become: true
+  with_items: "{{docker_users_loop[Os] }}"
 
 
 
