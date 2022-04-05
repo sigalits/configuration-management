@@ -5,6 +5,9 @@ filters:
  tag:Name:
    - Node*
 instance-state-name : running
+hostnames:
+  - tag:Name
+  - private-ip-address
 compose:
   ansible_host: private_ip_address
   ansible_user: "{{ 'ubuntu' if (platform_details == 'Linux/UNIX') else ('ec2-user') }}"
