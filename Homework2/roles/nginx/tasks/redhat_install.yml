@@ -8,11 +8,9 @@
   ansible.builtin.debug:
     var:  docker_version ,ansible_user ,docker_package
  
-
-
 - name: install python3.6 on rhel
   package:
-    name: "{{install_defalut_dependency[ansible_user] }}"
+    name: "{{install_defalut_dependency[Os] }}"
     state: present
 
 
@@ -20,15 +18,28 @@
   yum_repository:
     name: docker
     description: repo for docker
-    baseurl: https://download.docker.com/linux/centos/8/x86_64/stable/
+    baseurl: "{{docker_repos[Os] }}"
     gpgcheck: no
 
 
 - name: install docker on Rhel
   yum:
-    name: "{{install_docker_loop[ansible_user] }}"
+    name: "{{install_docker_loop[Os] }}"
     state: present
     update_cache: yes
+
+- name: users | adding docker users (for use without sudo) on redhat
+  user:
+    name: "{{ item }}"
+    append: yes
+    groups: docker
+  become: true
+  with_items: "{{docker_users_loop[Os] }}"
+
+- name: install docker module for python 
+  pip:
+    name: docker
+
 
 
   

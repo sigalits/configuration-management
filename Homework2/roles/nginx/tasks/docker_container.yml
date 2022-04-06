@@ -1,18 +1,17 @@
 ---
+- name: Print all available facts on docker onstallation
+  ansible.builtin.debug:
+    var:  ansible_user ,remote_user ,Os
 
 - name: install docker module for python 
   pip:
     name: docker
 
-  
 - name: start docker 
   service:
     name: docker
     state: started
     enabled: yes
-
-#  - name: starting nginx
-#    shell: docker run -d -p 8080:80 nginx
 
 - name: pull and start nginx containar
   docker_container:
