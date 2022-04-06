@@ -25,8 +25,8 @@ Example Playbook
 ----------------
 
 - name: run over all ec2 servers
+- 
    hosts: aws_ec2
-
   
    roles:
     - nginx
@@ -34,6 +34,5 @@ Example Playbook
 
 Author Information
 ------------------
-
 Author: Sigalit Hillel Shelly 
 Email : sigalit.hillel@gmail.com
