@@ -25,12 +25,11 @@ Example Playbook
 ----------------
 
 - name: run over all ec2 servers
-  hosts: aws_ec2
-  become: true
-  remote_user:  "{{ 'ubuntu' if platform_details == 'Linux/UNIX'  else 'centos' if platform_details == 'CentOs'  else 'ec2-user' }}" 
+   hosts: aws_ec2
+
   
-  roles:
-  - nginx
+   roles:
+    - nginx
 
 
 Author Information
