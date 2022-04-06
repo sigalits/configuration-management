@@ -1,38 +1,40 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+This playbook deploys RedHat/CentOs/Ubuntu servers with Docker Containers with Nginx.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+The role uses the EC2 module to Deploy servers with tag Name:Node*.
 
 Role Variables
 --------------
+From Defaults vars:
+docker_version: None which means lates version will be deployed , can be overridden using extra-vars
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+From vars:
+install_defalut_dependency: dictionary of lists per ditribution
+install_docker_loop :       dictionary of lists per ditribution
+docker_users_loop:          dictionary of lists per ditribution  
+docker_repos:               dictionary per ditribution 
+docker_package: "docker-ce-{{docker_version}}"
 
-Dependencies
-------------
-
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+- name: run over all ec2 servers
+  hosts: aws_ec2
+  become: true
+  remote_user:  "{{ 'ubuntu' if platform_details == 'Linux/UNIX'  else 'centos' if platform_details == 'CentOs'  else 'ec2-user' }}" 
+  
+  roles:
+  - nginx
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
-
-License
--------
-
-BSD
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Author: Sigalit Hillel Shelly 
+Email : sigalit.hillel@gmail.com
