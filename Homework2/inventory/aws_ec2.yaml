@@ -10,4 +10,3 @@ hostnames:
   - private-ip-address
 compose:
   ansible_host: private_ip_address
-  ansible_user: "{{ 'ubuntu' if (platform_details == 'Linux/UNIX') else ('ec2-user') }}"
